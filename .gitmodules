@@ -1,0 +1,3 @@
+[submodule "lib/albatross"]
+	path = lib/albatross
+	url = git@github.com:AndrewWasHere/albatross.git
