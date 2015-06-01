@@ -6,6 +6,7 @@ Licensed under the BSD 3-clause License. See LICENSE.txt or
 """
 from abc import ABCMeta, abstractmethod
 import datetime
+import os
 from lib.albatross import log
 
 _log = log.get_logger(__name__)
@@ -22,14 +23,20 @@ class Watcher(metaclass=ABCMeta):
     @abstractmethod
     def watch(self):
         """Observer loop."""
-        _log.error(
-            '%s.watch() -- this should not happen!',
-            self.__class__.__name__
-        )
 
     @staticmethod
-    def timestamp():
+    def _timestamp():
         _log.debug('Watcher.timestamp()')
 
         ts = datetime.datetime.now()
         return ts.strftime('%Y%m%d_%H%M%S')
+
+    def _capture(self):
+        """Take a picture."""
+        photo = os.path.join(self._album, '{}.jpg'.format(self._timestamp()))
+
+        _log.info('Taking picture, %s.', photo)
+
+        self._camera.capture(photo)
+
+        return photo

@@ -4,7 +4,6 @@ All rights reserved.
 Licensed under the BSD 3-clause License. See LICENSE.txt or
 <http://opensource.org/licenses/BSD-3-Clause>.
 """
-import os
 from lib.albatross import log
 from lib.watcher import Watcher
 
@@ -28,5 +27,4 @@ class PsdWatcher(Watcher):
         _log.debug('%s.watch()', self.__class__.__name__)
 
         while True:
-            photo = os.path.join(self._album, self.timestamp())
-            self._camera.capture(photo)
+            photo = self._capture()
