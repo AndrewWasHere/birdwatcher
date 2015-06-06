@@ -7,6 +7,7 @@ Licensed under the BSD 3-clause License. See LICENSE.txt or
 from abc import ABCMeta, abstractmethod
 import datetime
 import os
+import itertools
 from lib.albatross import log
 
 _log = log.get_logger(__name__)
@@ -83,16 +84,22 @@ class Watcher(metaclass=ABCMeta):
 
     @staticmethod
     def _timestamp():
-        _log.debug('Watcher.timestamp()')
+        _log.debug('Watcher._timestamp()')
 
         ts = datetime.datetime.now()
         return ts.strftime('%Y%m%d_%H%M%S')
 
     def _capture(self):
         """Take a picture."""
-        photo = os.path.join(self._album, '{}.jpg'.format(self._timestamp()))
+        ts = self._timestamp()
+        photo = os.path.join(self._album, '{}.jpg'.format(ts))
+        if os.path.exists(photo):
+            for x in itertools.count():
+                photo = os.path.join(self._album, '{}_{}.jpg'.format(ts, x))
+                if not os.path.exists(photo):
+                    break
 
-        _log.info('Taking picture, %s.', photo)
+        _log.info('Taking picture: %s.', photo)
 
         self._camera.capture(photo)
 
