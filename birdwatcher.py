@@ -9,6 +9,7 @@ import picamera
 from lib.albatross import log
 from lib.albatross.path import abs_path
 from lib.naive_watcher import NaiveWatcher
+from lib.pir_watcher import PirWatcher
 from lib.psd_watcher import PsdWatcher
 
 _log = log.get_logger(__name__)
@@ -45,6 +46,11 @@ def parse_command_line():
         subparsers,
         'psd',
         'Power Spectral Density Watcher'
+    )
+    PirWatcher.add_command_line_args(
+        subparsers,
+        'pir',
+        'Passive Infrared Watcher'
     )
 
     args = parser.parse_args()

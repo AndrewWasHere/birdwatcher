@@ -77,9 +77,11 @@ class Watcher(metaclass=ABCMeta):
         Returns:
             (dict)
         """
+        converted = (key.replace('-', '_') for key in cls.args)
+
         return {
             k: getattr(ns, k)
-            for k in cls.args
+            for k in converted
         }
 
     @staticmethod
