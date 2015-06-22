@@ -35,7 +35,7 @@ class NaiveWatcher(Watcher):
     }
 
     def __init__(self, camera, album, delay, duration):
-        """Naive Watcher Constructor
+        """Naive Watcher Constructor.
 
         Args:
             camera (PiCamera): camera object.

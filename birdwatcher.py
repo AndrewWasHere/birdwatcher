@@ -34,6 +34,13 @@ def parse_command_line():
         action='store_true',
         help='Flip pictures horizontally'
     )
+    parser.add_argument(
+        '--exposure-mode',
+        nargs='?',
+        default='sports',
+        choices=picamera.PiCamera.EXPOSURE_MODES,
+        help='Camera exposure modes'
+    )
 
     # Watchers.
     subparsers = parser.add_subparsers()
@@ -59,10 +66,11 @@ def parse_command_line():
     return args
 
 
-def configure_camera(args):
+def configure_camera(camera, args):
     """Create and configure a picamera.
 
     Args:
+        camera (picamera.PiCamera): camera to configure.
         args (argparse.Namespace): Command line arguments.
 
     Returns:
@@ -70,13 +78,14 @@ def configure_camera(args):
     """
     _log.debug('configure_camera()')
 
-    camera = picamera.PiCamera()
     camera.vflip = args.vflip
     camera.hflip = args.hflip
+    camera.exposure_mode = args.exposure_mode
 
     _log.info('Camera Settings:')
     _log.info('  hflip=%s', camera.hflip)
     _log.info('  vflip=%s', camera.vflip)
+    _log.info('  exposure_mode=%s', camera.exposure_mode)
 
     return camera
 
@@ -84,8 +93,10 @@ def configure_camera(args):
 def main():
     args = parse_command_line()
 
-    with log.logger(**log.configure_logging(args)):
-        camera = configure_camera(args)
+    with log.logger(**log.configure_logging(args)), \
+        picamera.PiCamera() as camera:
+
+        configure_camera(camera, args)
         watcher = args.watcher.build(camera, args.album, args)
         watcher.watch()
 
