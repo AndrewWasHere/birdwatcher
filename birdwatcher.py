@@ -94,7 +94,7 @@ def main():
     args = parse_command_line()
 
     with log.logger(**log.configure_logging(args)), \
-        picamera.PiCamera() as camera:
+        picamera.PiCamera(resolution=(2592, 1944)) as camera:
 
         configure_camera(camera, args)
         watcher = args.watcher.build(camera, args.album, args)
